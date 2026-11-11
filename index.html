@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Piloterie</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Piloterie">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#F6F8F7">
+<style>
+:root{--ink:#14201C;--muted:#4B5A55;--blue:#2F74C0;--blue-bg:#E3EEFB;--blue-ink:#1F5A9E;--pink:#C23680;--pink-bg:#FDE8F2;--border:#B6C4BE;--line:#D5DEDA;--bg:#F6F8F7;--card:#fff;--ok:#E4F5EA;--ok-ink:#14582E;--warn:#FFF4D6;--warn-ink:#5A4300}
+@media (prefers-color-scheme:dark){:root{--ink:#EAF1EE;--muted:#A9B8B2;--blue-bg:#16283f;--blue-ink:#8DB9EE;--pink-bg:#3a1b2d;--border:#4A5A54;--line:#33423D;--bg:#101614;--card:#18211E;--ok:#17301f;--ok-ink:#8fd6a9;--warn:#3b3112;--warn-ink:#f0d68a}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif}
+body{min-height:100vh;padding:max(16px,env(safe-area-inset-top)) 18px max(20px,env(safe-area-inset-bottom));max-width:520px;margin:0 auto}
+button,input{font:inherit;color:inherit}
+h1{font-size:28px;margin:0;letter-spacing:-.5px}h2{font-size:26px;margin:0;letter-spacing:-.5px}
+.sub{font-size:14px;color:var(--muted);margin-top:2px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:8px 12px;font-size:13px;font-weight:600;background:var(--ok);color:var(--ok-ink)}
+.chip.warn{background:var(--warn);color:var(--warn-ink)}
+.tiles{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.tile{display:flex;align-items:center;gap:14px;border-radius:18px;padding:18px;min-height:84px;border:2px solid var(--blue);background:var(--blue);color:#fff;text-align:left;width:100%;cursor:pointer}
+.tile.light{background:var(--blue-bg);color:var(--ink)}
+.tile.pink{background:var(--pink);border-color:var(--pink)}
+.tile[disabled]{opacity:.55;cursor:default}
+.tile b{display:block;font-size:20px}.tile span{font-size:14px;opacity:.95}
+.tile svg{flex:none}
+.back{background:none;border:0;color:var(--blue-ink);font-weight:600;font-size:16px;min-height:44px;padding:0;display:flex;align-items:center;gap:2px;cursor:pointer}
+.back.pink{color:var(--pink)}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;margin-top:14px}
+.card label{font-size:14px;font-weight:600;color:var(--muted);display:block}
+.big{width:100%;border:0;outline:0;background:transparent;font-size:52px;font-weight:700;letter-spacing:-1px;padding:0}
+.row{display:flex;gap:8px;align-items:center}
+.seg{display:flex;gap:8px;margin-top:8px}
+.seg button{flex:1;min-height:52px;border-radius:14px;border:1.5px solid var(--border);background:var(--card);font-weight:600;font-size:16px;cursor:pointer}
+.seg button.on{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:700}
+.btn{display:flex;align-items:center;justify-content:center;min-height:58px;border-radius:16px;border:0;background:var(--blue);color:#fff;font-size:19px;font-weight:700;width:100%;cursor:pointer;margin-top:16px}
+.btn.pink{background:var(--pink)}
+.btn.ghost{background:var(--card);color:var(--ink);border:1.5px solid var(--border);font-size:16px;min-height:48px;font-weight:600}
+.btn[disabled]{opacity:.5}
+.note{background:var(--blue-bg);border-radius:14px;padding:12px 14px;font-size:14px;line-height:1.45;color:var(--blue-ink);margin-top:14px}
+.note.warn{background:var(--warn);color:var(--warn-ink)}
+.list{margin-top:6px;font-size:15px}
+.list>div{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);gap:8px}
+.list>div:last-child{border-bottom:0}
+.tag{font-size:12px;font-weight:700;border-radius:8px;padding:3px 8px;background:var(--warn);color:var(--warn-ink)}
+.tag.ok{background:var(--ok);color:var(--ok-ink)}
+.x{background:none;border:0;color:var(--muted);font-size:20px;padding:4px 10px;cursor:pointer}
+input.date{border:1.5px solid var(--border);border-radius:10px;padding:6px 10px;background:var(--card);font-size:15px}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.pill{border-radius:12px;padding:10px 14px;font-size:17px;font-weight:700;background:var(--pink-bg);color:var(--pink);border:2px solid transparent;cursor:pointer}
+.pill.on{background:var(--pink);color:#fff}
+.pill.done{font-size:15px;font-weight:600;cursor:default}
+.num{width:100%;border:0;outline:0;background:transparent;font-size:36px;font-weight:700;letter-spacing:1px;padding:2px 0}
+.small{font-size:13px;color:var(--muted);line-height:1.4}
+.foot{margin-top:18px;border:1.5px dashed var(--border);border-radius:14px;padding:12px 14px;font-size:13.5px;color:var(--muted);line-height:1.45}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:12px;font-size:15px;z-index:9;max-width:90%}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="app.js"></script>
+</body>
+</html>
