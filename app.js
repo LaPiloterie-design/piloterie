@@ -57,7 +57,7 @@
       '<button class="tile pink" data-go="pesee">' + ICON.pese + '<div style="flex:1"><b>Pesée</b><span>Cabris et chevrettes, un par un</span></div>' + ICON.fleche + '</button>' +
       '</div>' +
       '<button class="btn" id="envoyer"' + (n ? '' : ' style="background:var(--card);color:var(--ink);border:1.5px solid var(--border)"') + '>Envoyer les résultats' + (n ? ' (' + n + ')' : '') + '</button>' +
-      '<div class="foot">' + info + '<br><label style="display:inline-block;margin-top:8px;color:var(--blue-ink);font-weight:600;text-decoration:underline;cursor:pointer">Charger le troupeau<input id="fichier" type="file" accept=".json,application/json" hidden></label>' +
+      '<div class="foot">' + info + '<br><label style="display:inline-block;margin-top:8px;color:var(--blue-ink);font-weight:600;text-decoration:underline;cursor:pointer">Charger le troupeau<input id="fichier" type="file" hidden></label>' +
       ' · <a href="#" id="renvoyer" style="color:var(--blue-ink);font-weight:600">Renvoyer tout (30 jours)</a></div>';
   }
 
