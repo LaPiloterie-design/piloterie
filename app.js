@@ -404,5 +404,5 @@
     if (e.target.id === 'b-date' && e.target.value) { B.date = e.target.value; render(); }
   });
   render();
-  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () { /* hors ligne non disponible */ });
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js?v=20261112').catch(function () { /* hors ligne non disponible */ });
 })();
