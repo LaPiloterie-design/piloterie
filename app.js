@@ -45,7 +45,7 @@
 
   function chevrerie() {
     var n = aEnvoyer().length;
-    var chip = n ? '<span class="chip warn">' + n + ' à envoyer</span>' : '<span class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Tout est envoyé</span>';
+    var chip = n ? '<button class="chip warn" data-go="aenvoyer" style="border:0;font-family:inherit">' + n + ' à envoyer ›</button>' : '<span class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Tout est envoyé</span>';
     var info = troupeau ? 'Troupeau chargé le ' + esc(dateFr((troupeau.genere || '').slice(0, 10))) + ' (' + troupeau.chevres.length + ' animaux).' : '<strong>Troupeau non chargé.</strong> Chargez le fichier « troupeau_rationneur.json » pour retrouver les chèvres par leur numéro.';
     return '<button class="back" data-go="accueil">' + ICON.retour + 'Piloterie</button><div class="top"><div><h1>Chèvrerie</h1></div>' + chip + '</div>' +
       '<div class="sub" style="margin-top:6px">' + esc(jourLong(aujourdhui())) + '</div>' +
@@ -63,13 +63,13 @@
 
   function accueil() {
     var n = aEnvoyer().length;
-    var chip = n ? '<span class="chip warn">' + n + ' à envoyer</span>' : '<span class="chip">Tout est envoyé</span>';
+    var chip = n ? '<button class="chip warn" data-go="aenvoyer" style="border:0;font-family:inherit">' + n + ' à envoyer ›</button>' : '<span class="chip">Tout est envoyé</span>';
     return '<div class="top"><div><div class="sub">Ferme de la Piloterie</div><h1>Piloterie</h1></div>' + chip + '</div>' +
       '<div class="sub" style="margin-top:6px">' + esc(jourLong(aujourdhui())) + '</div>' +
       '<div class="tiles"><button class="tile" data-go="chevrerie" style="min-height:110px">' + ICON.goutte + '<div style="flex:1"><b style="font-size:24px">Chèvrerie</b><span>Lait du tank, pesées, contrôles</span></div>' + ICON.fleche + '</button>' +
       '<button class="tile light" disabled style="min-height:110px">' + ICON.pulse + '<div style="flex:1"><b style="font-size:24px">Fromagerie</b><span>Bientôt</span></div></button></div>' +
       '<button class="btn" id="envoyer"' + (n ? '' : ' style="background:var(--card);color:var(--ink);border:1.5px solid var(--border)"') + '>Envoyer les résultats' + (n ? ' (' + n + ')' : '') + '</button>' +
-      '<div class="small" style="margin-top:18px;text-align:center">Version du 12/11/2026 · contrôle, labo, qualité du lait</div>';
+      '<div class="small" style="margin-top:18px;text-align:center">Version du 12/11/2026 · b · contrôle, labo, qualité du lait</div>';
   }
 
   function lait() {
@@ -303,8 +303,24 @@
     B.ech = String(parseInt(ech, 10) + 1); B.tb = ''; B.tp = ''; render(); var i = document.getElementById('b-tb'); if (i) i.focus();
   }
 
+  function aenvoyerVue() {
+    var l = aEnvoyer().slice().sort(function (a, b) { return a.saisi < b.saisi ? 1 : -1; });
+    var nomChevre = function (s) { var c = troupeau && troupeau.chevres.filter(function (x) { return x.id === s.chevre_id; })[0]; return c ? lab(c) : String(s.numero || '').slice(-5); };
+    var txt = function (s) {
+      if (s.type === 'tank') return 'Lait du tank · ' + dateFr(s.date) + ' · ' + fr(s.litres, 1) + ' L';
+      if (s.type === 'pesee') return 'Pesée · ' + nomChevre(s) + ' · ' + fr(s.kg, 1) + ' kg · ' + dateFr(s.date);
+      if (s.type === 'controle') return 'Contrôle du ' + dateFr(s.controle) + ' · ' + nomChevre(s) + ' · ' + (s.session === 'soir' ? 'soir' : 'matin') + (s.absente ? ' · absente' : ' · ' + fr(s.litres, 1) + ' L');
+      if (s.type === 'labo') return 'Labo · éch. ' + s.echantillon + ' · TB ' + fr(s.tb, 1) + ' · TP ' + fr(s.tp, 1);
+      if (s.type === 'qualite') return 'Qualité du lait · ' + dateFr(s.date);
+      return s.type;
+    };
+    return '<button class="back" data-go="chevrerie">' + ICON.retour + 'Chèvrerie</button><h2>À envoyer</h2>' +
+      '<div class="small">Touchez ✕ pour supprimer une saisie qui n\'est pas encore envoyée.</div>' +
+      '<div class="card"><div class="list">' + (l.map(function (s) { return '<div><span>' + esc(txt(s)) + '</span><button class="x" data-del="' + s.id + '" aria-label="Supprimer">✕</button></div>'; }).join('') || '<div><span class="small">Rien à envoyer.</span></div>') + '</div></div>';
+  }
+
   function render() {
-    $app.innerHTML = vue === 'lait' ? lait() : vue === 'pesee' ? pesee() : vue === 'qualite' ? qualite() : vue === 'controle' ? controle() : vue === 'labo' ? laboVue() : vue === 'chevrerie' ? chevrerie() : accueil();
+    $app.innerHTML = vue === 'lait' ? lait() : vue === 'pesee' ? pesee() : vue === 'qualite' ? qualite() : vue === 'controle' ? controle() : vue === 'labo' ? laboVue() : vue === 'aenvoyer' ? aenvoyerVue() : vue === 'chevrerie' ? chevrerie() : accueil();
     if (vue === 'pesee') { majPesee(); majFaits(); }
     if (vue === 'qualite') majQualite();
     if (vue === 'controle') majControle();
@@ -383,7 +399,7 @@
     if (t.id === 'c-annule-rec') { e.preventDefault(); C.recontrole = null; render(); return; }
     if (t.id === 'c-rest') { C.showRest = !C.showRest; render(); return; }
     if (t.id === 'c-oubli') { e.preventDefault(); if (!C.sel) { toast('Choisissez d\'abord la chèvre pas relevée.'); return; } if (!oubliees.some(function (o) { return o.controle === C.date && o.numero === C.sel.num; })) oubliees.push({ id: C.sel.id, numero: C.sel.num, controle: C.date }); ecrire('rt_oubliees', oubliees); toast(lab(C.sel) + ' : à recontrôler demain'); C.num = ''; C.sel = null; C.litres = ''; render(); return; }
-    if (t.dataset.del) { saisies = saisies.filter(function (s) { return s.id !== t.dataset.del; }); sauver(); render(); toast('Relevé supprimé.'); }
+    if (t.dataset.del) { saisies = saisies.filter(function (s) { return s.id !== t.dataset.del; }); sauver(); render(); toast('Saisie supprimée.'); }
   });
   document.addEventListener('input', function (e) {
     if (e.target.id === 'p-num') { P.num = e.target.value.replace(/\D/g, ''); P.sel = null; majPesee(); }
