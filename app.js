@@ -68,7 +68,8 @@
       '<div class="sub" style="margin-top:6px">' + esc(jourLong(aujourdhui())) + '</div>' +
       '<div class="tiles"><button class="tile" data-go="chevrerie" style="min-height:110px">' + ICON.goutte + '<div style="flex:1"><b style="font-size:24px">Chèvrerie</b><span>Lait du tank, pesées, contrôles</span></div>' + ICON.fleche + '</button>' +
       '<button class="tile light" disabled style="min-height:110px">' + ICON.pulse + '<div style="flex:1"><b style="font-size:24px">Fromagerie</b><span>Bientôt</span></div></button></div>' +
-      '<button class="btn" id="envoyer"' + (n ? '' : ' style="background:var(--card);color:var(--ink);border:1.5px solid var(--border)"') + '>Envoyer les résultats' + (n ? ' (' + n + ')' : '') + '</button>';
+      '<button class="btn" id="envoyer"' + (n ? '' : ' style="background:var(--card);color:var(--ink);border:1.5px solid var(--border)"') + '>Envoyer les résultats' + (n ? ' (' + n + ')' : '') + '</button>' +
+      '<div class="small" style="margin-top:18px;text-align:center">Version du 12/11/2026 · contrôle, labo, qualité du lait</div>';
   }
 
   function lait() {
